@@ -1,0 +1,38 @@
+pipeline {
+environment {
+imagename = "reshmababu/jenkinsdemo"
+registryCredential = 'Dockerhub_id'
+dockerImage = ''
+}
+  agent any 
+  stages {
+  stage('Cloning git') {
+     steps {
+        git branch: 'main', credentialsId: 'Github_id', url: 'https://github.ibm.com/rebabu99/jenkin_pipeline.git'
+}
+}
+  stage('Building Image') {
+  steps {
+    script {
+      dockerImage = docker.build imagename + ":$BUILD_NUMBER"
+      }
+     }
+  }
+ stage('Pushing image') {
+ steps {
+ script {
+ docker.withRegistry ('', registryCredential) {
+ dockerImage.push ()
+ }
+ }
+ }
+ }
+ stage('Deploy App in k8s') {
+ steps{
+ script {
+ kubernetesDeploy(configs: "deployment.yaml" , kubeconfigId: "kubeconfig")
+ }
+ }
+ }
+}
+}
