@@ -8,7 +8,7 @@ dockerImage = ''
   stages {
   stage('Cloning git') {
      steps {
-        git branch: 'main', credentialsId: 'Github_id', url: 'https://github.ibm.com/rebabu99/jenkin_pipeline.git'
+        git branch: 'main', credentialsId: 'Github_id', url: 'https://github.com/reshmababu/Jenkins_pipeline.git'
 }
 }
   stage('Building Image') {
